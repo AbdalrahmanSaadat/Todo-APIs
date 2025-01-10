@@ -28,7 +28,7 @@ Create a project with the name you want
 Install Google Cloud SDK
 
 
-Install Google Cloud SDK Using command gcloud init
+Initialize  Google Cloud SDK Using command: gcloud init
 
 
 Create app.yaml file to configure the app on Google Cloud 
@@ -37,7 +37,7 @@ Create app.yaml file to configure the app on Google Cloud
 Deply the app using this command: gcloud app deploy
 
 
-to monitor and see logs use: gcloud app logs tail -s default
+to monitor and see logs use command: gcloud app logs tail -s default
 
 
 
