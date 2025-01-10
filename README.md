@@ -16,7 +16,7 @@ then you could test all endpoints via local server:
 
 http://127.0.0.1:8000/{route}
 # How to deploy The project on Google Cloud Services?
-Prepare the requieremnts file
+Prepare the requirements file
 
 
 Create account on google Cloud Services
