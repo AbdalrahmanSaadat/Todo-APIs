@@ -54,10 +54,9 @@ async def register_user(credentials: UserCredentials):
 
 @router.post("/login")
 async def login_user(credentials: UserCredentials):
-    auth0 = get_auth0_client()
     get_token = GetToken(AUTH0_DOMAIN, client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
     try:
-        token = get_token.login(username=credentials.email, password=credentials.password, realm="Username-Password-Authentication", audience=API_IDENTIFIER, grant_type="client_credentials")
+        token = get_token.login(username=credentials.email, password=credentials.password, realm="Username-Password-Authentication", audience=API_IDENTIFIER)
         return token
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
