@@ -1,0 +1,5 @@
+fastapi==0.70.0
+pydantic==1.8.2
+motor==2.5.1
+python-dotenv==0.19.2
+uvicorn==0.15.0
