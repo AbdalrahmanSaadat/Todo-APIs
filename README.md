@@ -6,9 +6,9 @@ Todo list simple CRUD using FastAPI for Backend, MongoDb for database, and Auth0
 
 
 # Instructions
-To run the project locally you could use the following command:
+To run the project locally you could use the following command after make sure you installed required libiraries:
 
-# How to deploy project on Google Cloud Services?
+# How to deploy The project on Google Cloud Services?
 
 
 
