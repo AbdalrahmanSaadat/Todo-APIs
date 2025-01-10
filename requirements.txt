@@ -6,3 +6,5 @@ uvicorn==0.34.0
 gunicorn==22.0.0
 pymongo[srv]==4.9.2
 google-cloud-secret-manager==2.22.0
+python-jose==3.3.0
+auth0-python==4.7.2
