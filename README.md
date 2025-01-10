@@ -23,6 +23,8 @@ Each folder include a specific action alongside with it's all possible
 
 # Security Notes
 While testing locally I used .env file to store the Database URL
+
+
 While testing on production I used Google Cloud Secret Manager
 
 
