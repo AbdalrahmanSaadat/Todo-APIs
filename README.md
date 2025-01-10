@@ -2,14 +2,42 @@
 Todo list simple CRUD using FastAPI for Backend, MongoDb for database, and Auth0 for Authorization.
 
 # Description
-
+A simple Todo List APIs, You shoild register first to be authorized to use the APIs, after registration you could login and create a Todo Task with a title and due date if you want, you could swith the completion status via another seperated endpoint for more convenient approach.
 
 
 # Instructions
-To run the project locally you could use the following command after make sure you installed required libiraries:
+To run the project locally you could use the following command after make sure you installed required libiraries from requirements file:
 
+
+uvicorn main:app --reload
+
+
+then you could test all endpoints via local server:
+
+http://127.0.0.1:8000/{route}
 # How to deploy The project on Google Cloud Services?
+Prepare the requieremnts file
 
+
+Create account on google Cloud Services
+
+
+Create a project with the name you want
+
+
+Install Google Cloud SDK
+
+
+Install Google Cloud SDK Using command gcloud init
+
+
+Create app.yaml file to configure the app on Google Cloud 
+
+
+Deply the app using this command: gcloud app deploy
+
+
+to monitor and see logs use: gcloud app logs tail -s default
 
 
 
@@ -20,6 +48,7 @@ Each folder include a specific action alongside with it's all possible
 
 
 # Project Public Link
+https://todo-447413.uc.r.appspot.com
 
 # Security Notes
 While testing locally I used .env file to store the Database URL
