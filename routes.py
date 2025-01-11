@@ -9,6 +9,7 @@ from auth import verify_jwt, http_bearer, HTTPBearer, get_auth0_client
 import os
 from dotenv import load_dotenv
 import requests
+from typing import List
 
 load_dotenv()
 
@@ -19,24 +20,56 @@ CLIENT_SECRET = os.getenv("AUTH0_CLIENT_SECRET")
 
 router = APIRouter()
 
-# Create a new todo
+####################### Todo Routes #####################
+
+# Protect the create_todo endpoint
 @router.post("/create")
-async def create_todo(todo: Todo):
+async def create_todo(todo: Todo, token: str = Depends(http_bearer)):
+    
+    payload = verify_jwt(token.credentials)
+    user_id = payload["sub"]  
+
+    
     try:
-        
         todo.completed = False
-        
+        todo.user_id = user_id  
+
         # to proper addtion the date field to the database
         if todo.due_date:
             todo.due_date = todo.due_date.isoformat()
-            
+
+        
         result = await todo_collection.insert_one(todo.model_dump())
         created_todo = await todo_collection.find_one({"_id": result.inserted_id})
+        
         return todo_serializer(created_todo)
     except ValidationError as e:
         raise HTTPException(status_code=422, detail=e.errors())
-    
 
+
+
+@router.get("/todos", response_model=List[Todo])
+async def get_user_todos(token: str = Depends(http_bearer)):
+    try:
+        
+        payload = verify_jwt(token.credentials)
+        user_id = payload["sub"]  
+
+        
+        user_todos = await todo_collection.find({"user_id": user_id}).to_list(None)
+
+        
+        return [todo_serializer(todo) for todo in user_todos]
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
+
+
+####################### AUTHENTICATION ROUTES ############################
 
 
 

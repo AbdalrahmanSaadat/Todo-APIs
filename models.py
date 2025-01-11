@@ -7,6 +7,7 @@ class Todo(BaseModel):
     description: Optional[str] = None
     completed: bool = False
     due_date: Optional[date] = None
+    user_id: Optional[str] = None 
     
     
 class UserCredentials(BaseModel):
