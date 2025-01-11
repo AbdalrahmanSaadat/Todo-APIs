@@ -10,6 +10,7 @@ import os
 from dotenv import load_dotenv
 import requests
 from typing import List
+from bson import ObjectId
 
 load_dotenv()
 
@@ -29,7 +30,7 @@ async def create_todo(todo: Todo, token: str = Depends(http_bearer)):
     payload = verify_jwt(token.credentials)
     user_id = payload["sub"]  
 
-    
+
     try:
         todo.completed = False
         todo.user_id = user_id  
@@ -66,6 +67,32 @@ async def get_user_todos(token: str = Depends(http_bearer)):
 
 
 
+
+@router.get("/todo/{todo_id}", response_model=Todo)
+async def get_todo_by_id(todo_id: str, token: str = Depends(http_bearer)):
+    try:
+        
+        payload = verify_jwt(token.credentials)
+        user_id = payload["sub"]  
+
+        
+        if not ObjectId.is_valid(todo_id):
+            raise HTTPException(status_code=400, detail="Invalid todo ID format")
+
+        
+        todo = await todo_collection.find_one({"_id": ObjectId(todo_id), "user_id": user_id})
+
+        
+        if not todo:
+            raise HTTPException(status_code=404, detail="Todo not found or unauthorized access")
+
+        
+        return todo_serializer(todo)
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 

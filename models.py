@@ -3,6 +3,7 @@ from typing import Optional
 from datetime import date
 
 class Todo(BaseModel):
+    id: Optional[str] = None
     title: str
     description: Optional[str] = None
     completed: bool = False
