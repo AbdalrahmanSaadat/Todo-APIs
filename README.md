@@ -2,7 +2,7 @@
 Todo list simple CRUD using FastAPI for Backend, MongoDb for database, and Auth0 for Authorization.
 
 # Description
-A simple Todo List APIs, You shoild register first to be authorized to use the APIs, after registration you could login and create a Todo Task with a title and due date if you want, you could swith the completion status via another seperated endpoint for more convenient approach.
+A simple Todo List APIs, You shoild register first to be authorized to use the APIs, after registration you could login and create a Todo Task with a title and due date if you want, you could switch the completion status via another seperated endpoint for more convenient approach.
 
 
 # Instructions
