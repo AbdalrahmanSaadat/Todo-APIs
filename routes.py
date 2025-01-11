@@ -96,6 +96,107 @@ async def get_todo_by_id(todo_id: str, token: str = Depends(http_bearer)):
 
 
 
+
+@router.patch("/todo/{todo_id}", response_model=Todo)
+async def update_todo(todo_id: str, updated_fields: dict, token: str = Depends(http_bearer)):
+    try:
+        
+        payload = verify_jwt(token.credentials)
+        user_id = payload["sub"]
+
+    
+        if not ObjectId.is_valid(todo_id):
+            raise HTTPException(status_code=400, detail="Invalid todo ID format")
+
+        
+
+        todo = await todo_collection.find_one({"_id": ObjectId(todo_id), "user_id": user_id})
+        if not todo:
+            raise HTTPException(status_code=404, detail="Todo not found or unauthorized access")
+
+        
+        if "due_date" in updated_fields:
+            try:
+                updated_fields["due_date"] = date.fromisoformat(updated_fields["due_date"]).isoformat()
+            except ValueError:
+                raise HTTPException(status_code=400, detail="Invalid date format. Use ISO format (YYYY-MM-DD).")
+
+
+        
+        await todo_collection.update_one(
+            {"_id": ObjectId(todo_id), "user_id": user_id},
+            {"$set": updated_fields}  
+        )
+
+    
+        updated_todo = await todo_collection.find_one({"_id": ObjectId(todo_id), "user_id": user_id})
+        return todo_serializer(updated_todo)
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/todo/{todo_id}", response_model=dict)
+async def delete_todo(todo_id: str, token: str = Depends(http_bearer)):
+    try:
+
+        payload = verify_jwt(token.credentials)
+        user_id = payload["sub"]
+
+
+        if not ObjectId.is_valid(todo_id):
+            raise HTTPException(status_code=400, detail="Invalid todo ID format")
+
+
+        todo = await todo_collection.find_one({"_id": ObjectId(todo_id), "user_id": user_id})
+        if not todo:
+            raise HTTPException(status_code=404, detail="Todo not found or unauthorized access")
+
+
+        await todo_collection.delete_one({"_id": ObjectId(todo_id), "user_id": user_id})
+        return {"message": "Todo deleted successfully"}
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+@router.post("/todo/{todo_id}/toggle-completed", response_model=Todo)
+async def toggle_todo_completed(todo_id: str, token: str = Depends(http_bearer)):
+    try:
+        
+        payload = verify_jwt(token.credentials)
+        user_id = payload["sub"]
+
+        
+        if not ObjectId.is_valid(todo_id):
+            raise HTTPException(status_code=400, detail="Invalid todo ID format")
+
+        
+        todo = await todo_collection.find_one({"_id": ObjectId(todo_id), "user_id": user_id})
+        if not todo:
+            raise HTTPException(status_code=404, detail="Todo not found or unauthorized access")
+
+
+        updated_completed = not todo["completed"]
+        await todo_collection.update_one(
+            {"_id": ObjectId(todo_id), "user_id": user_id},
+            {"$set": {"completed": updated_completed}}
+        )
+
+
+        updated_todo = await todo_collection.find_one({"_id": ObjectId(todo_id), "user_id": user_id})
+        return todo_serializer(updated_todo)
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 ####################### AUTHENTICATION ROUTES ############################
 
 
